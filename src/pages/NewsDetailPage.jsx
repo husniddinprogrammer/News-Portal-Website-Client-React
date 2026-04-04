@@ -9,6 +9,7 @@ import { useLike } from '../hooks/useLike';
 import { formatDate, formatDateTime } from '../utils/date';
 import { formatViews } from '../utils/formatters';
 
+import DOMPurify from 'dompurify';
 import { Badge } from '../components/ui/Badge';
 import { TextNews } from '../components/news/TextNews';
 import { ImageTopNews } from '../components/news/ImageTopNews';
@@ -16,6 +17,9 @@ import { SectionTitle } from '../components/news/SectionTitle';
 import { SkeletonCard, SkeletonText, Skeleton } from '../components/ui/Skeleton';
 import { ErrorUI } from '../components/ui/ErrorUI';
 import { useTranslit } from '../hooks/useTranslit';
+import { SEOHead } from '../components/seo/SEOHead';
+import { JsonLd } from '../components/seo/JsonLd';
+import { SITE_URL, buildNewsJsonLd, buildBreadcrumbJsonLd } from '../utils/seo';
 
 // ─── Like button ────────────────────────────────────────────────────────────
 const LikeButton = ({ newsId, initialCount }) => {
@@ -128,8 +132,29 @@ export const NewsDetailPage = () => {
   if (isError || !news) return <ErrorUI onRetry={refetch} />;
 
 
+  const coverImage = news.images?.[0]?.url;
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
+      {/* ── SEO ── */}
+      <SEOHead
+        title={news.title}
+        description={news.shortDescription || news.title}
+        image={coverImage}
+        url={`${SITE_URL}/news/${news.slug}`}
+        type="article"
+        keywords={[
+          news.category?.name,
+          ...(news.hashtags?.map((h) => h.name) ?? []),
+        ].filter(Boolean).join(', ')}
+      />
+      <JsonLd data={buildNewsJsonLd(news)} />
+      <JsonLd data={buildBreadcrumbJsonLd([
+        { name: 'Bosh sahifa', url: SITE_URL },
+        ...(news.category ? [{ name: news.category.name, url: `${SITE_URL}/category/${news.category.slug}` }] : []),
+        { name: news.title, url: `${SITE_URL}/news/${news.slug}` },
+      ])} />
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         {/* ── LEFT: Article ── */}
@@ -163,7 +188,7 @@ export const NewsDetailPage = () => {
           {/* Content */}
           <div
             className="news-content text-base leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: trHtml(news.content) }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(trHtml(news.content)) }}
           />
 
           {/* Author */}

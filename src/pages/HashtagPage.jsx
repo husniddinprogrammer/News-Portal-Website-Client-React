@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNews } from '../hooks/useNews';
+import { SEOHead } from '../components/seo/SEOHead';
+import { SITE_URL } from '../utils/seo';
 import { ImageTopNews } from '../components/news/ImageTopNews';
 import { TextNews } from '../components/news/TextNews';
 import { SectionTitle } from '../components/news/SectionTitle';
@@ -24,6 +26,12 @@ export const HashtagPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-12">
+      <SEOHead
+        title={`#${slug}`}
+        description={`#${slug} hashtegi bo'yicha yangiliklar — NewsPortal`}
+        url={`${SITE_URL}/hashtag/${slug}`}
+        keywords={`${slug}, hashtag, yangiliklar`}
+      />
       <div className="flex items-center gap-3">
         <span className="text-2xl font-black text-red-600">#</span>
         <h1 className="text-2xl font-black capitalize" style={{ color: 'var(--text)' }}>

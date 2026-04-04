@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useNews } from '../hooks/useNews';
 import { useCategories } from '../hooks/useCategories';
+import { SEOHead } from '../components/seo/SEOHead';
+import { SITE_URL } from '../utils/seo';
 
 import { HeroNews } from '../components/news/HeroNews';
 import { ImageTopNews } from '../components/news/ImageTopNews';
@@ -74,6 +76,10 @@ export const HomePage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-12">
+      <SEOHead
+        url={SITE_URL}
+        description="O'zbekistonning eng so'nggi yangiliklari. Siyosat, iqtisodiyot, sport, texnologiya va boshqa sohalardagi xabarlar."
+      />
 
       {/* ── MAIN SPLIT: left 2/3, right 1/3 ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

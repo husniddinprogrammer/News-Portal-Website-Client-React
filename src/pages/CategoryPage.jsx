@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNews } from '../hooks/useNews';
+import { SEOHead } from '../components/seo/SEOHead';
+import { SITE_URL } from '../utils/seo';
 import { HeroNews } from '../components/news/HeroNews';
 import { ImageTopNews } from '../components/news/ImageTopNews';
 import { ImageLeftNews } from '../components/news/ImageLeftNews';
@@ -54,6 +56,12 @@ export const CategoryPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-12">
+      <SEOHead
+        title={slug}
+        description={`${slug} bo'yicha eng so'nggi yangiliklar — NewsPortal`}
+        url={`${SITE_URL}/category/${slug}`}
+        keywords={`${slug}, yangiliklar, o'zbekiston`}
+      />
 
       {/* MAIN SPLIT */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

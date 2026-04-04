@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Calendar, X } from 'lucide-react';
 import { useNews } from '../hooks/useNews';
+import { SEOHead } from '../components/seo/SEOHead';
 import { ImageTopNews } from '../components/news/ImageTopNews';
 import { TextNews } from '../components/news/TextNews';
 import { SectionTitle } from '../components/news/SectionTitle';
@@ -117,6 +118,7 @@ export const SortPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+      <SEOHead title={activeOption.label} noindex />
 
       {/* Header */}
       <div className="flex items-center gap-2 flex-wrap">

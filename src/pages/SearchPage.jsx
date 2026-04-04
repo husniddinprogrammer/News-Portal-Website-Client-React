@@ -3,6 +3,7 @@ import { Search } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNews } from '../hooks/useNews';
 import { useDebounce } from '../hooks/useDebounce';
+import { SEOHead } from '../components/seo/SEOHead';
 import { ImageTopNews } from '../components/news/ImageTopNews';
 import { SectionTitle } from '../components/news/SectionTitle';
 import { SkeletonCard } from '../components/ui/Skeleton';
@@ -22,6 +23,7 @@ export const SearchPage = () => {
   if (!searchQuery) {
     return (
       <div className="flex flex-col items-center justify-center py-32 gap-4 text-center">
+        <SEOHead title="Qidirish" noindex />
         <Search size={52} className="text-red-200" />
         <p className="text-lg font-medium" style={{ color: 'var(--text-muted)' }}>
           Qidirish uchun yozing...
@@ -32,6 +34,7 @@ export const SearchPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <SEOHead title={`"${searchQuery}" — qidiruv`} noindex />
       <SectionTitle>"{searchQuery}" — qidiruv natijalari</SectionTitle>
 
       {isLoading ? (
