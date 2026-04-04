@@ -4,7 +4,7 @@ import { Search, Sun, Moon, Globe, X, Menu, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useCategories } from '../../hooks/useCategories';
-import { useDebounce } from '../../hooks/useDebounce';
+
 import { LANGUAGES } from '../../i18n';
 import i18n from '../../i18n';
 
@@ -19,8 +19,26 @@ export const Navbar = () => {
   const [searchVal, setSearchVal] = useState('');
   const [langOpen, setLangOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const debouncedSearch = useDebounce(searchVal, 500);
   const langRef = useRef(null);
+  const searchTimerRef = useRef(null);
+
+  // Search input o'zgarganda — timer bilan navigate
+  const handleSearchChange = (val) => {
+    setSearchVal(val);
+    clearTimeout(searchTimerRef.current);
+    if (val.trim()) {
+      searchTimerRef.current = setTimeout(() => {
+        navigate(`/search?search=${encodeURIComponent(val.trim())}`);
+      }, 500);
+    }
+  };
+
+  // Search yopilganda — pending timerni bekor qil
+  const closeSearch = () => {
+    clearTimeout(searchTimerRef.current);
+    setSearchOpen(false);
+    setSearchVal('');
+  };
 
   useEffect(() => {
     const handler = (e) => {
@@ -30,14 +48,16 @@ export const Navbar = () => {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  // /search sahifasida search ochiq qolsin, boshqasida yopilsin
   useEffect(() => {
-    if (debouncedSearch.trim()) {
-      navigate(`/?search=${encodeURIComponent(debouncedSearch.trim())}`);
+    if (location.pathname === '/search') {
+      setSearchOpen(true);
+    } else {
+      closeSearch();
+      setMobileOpen(false);
     }
-  }, [debouncedSearch, navigate]);
-
-  // Close mobile menu on route change
-  useEffect(() => { setMobileOpen(false); }, [location.pathname]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
 
   const currentLang = LANGUAGES.find((l) => l.code === i18n.language) || LANGUAGES[0];
 
@@ -99,19 +119,19 @@ export const Navbar = () => {
                 <input
                   autoFocus
                   value={searchVal}
-                  onChange={(e) => setSearchVal(e.target.value)}
+                  onChange={(e) => handleSearchChange(e.target.value)}
                   placeholder={t('nav.search')}
                   className="outline-none bg-transparent text-sm w-36 sm:w-52"
                   style={{ color: 'var(--text)' }}
-                  onKeyDown={(e) => e.key === 'Escape' && (setSearchOpen(false), setSearchVal(''))}
+                  onKeyDown={(e) => e.key === 'Escape' && closeSearch()}
                 />
-                <button onClick={() => { setSearchOpen(false); setSearchVal(''); }}>
+                <button onClick={closeSearch}>
                   <X size={15} className="text-red-400 hover:text-red-600 transition-colors" />
                 </button>
               </div>
             ) : (
               <button
-                onClick={() => setSearchOpen(true)}
+                onClick={() => { setSearchOpen(true); navigate('/search', { replace: true }); }}
                 className="p-2 rounded-lg hover:bg-red-50 transition-all duration-200 hover:text-red-600"
                 style={{ color: 'var(--text-muted)' }}
                 title="Qidirish"

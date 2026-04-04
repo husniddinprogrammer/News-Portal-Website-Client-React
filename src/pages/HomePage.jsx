@@ -1,8 +1,7 @@
-import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNews } from '../hooks/useNews';
-import { useDebounce } from '../hooks/useDebounce';
 import { useCategories } from '../hooks/useCategories';
+
 import { HeroNews } from '../components/news/HeroNews';
 import { ImageTopNews } from '../components/news/ImageTopNews';
 import { ImageLeftNews } from '../components/news/ImageLeftNews';
@@ -34,8 +33,6 @@ const TwoColLeft = ({ news = [], loading }) => (
 
 export const HomePage = () => {
   const { t } = useTranslation();
-  const [searchParams] = useSearchParams();
-  const searchQuery = searchParams.get('search') || '';
 
   // ── Top rank hero (rank_desc, limit 1)
   const { news: topRanked, isLoading: loadHero } = useNews({ sort: 'rank_desc', limit: 1 });
@@ -72,32 +69,6 @@ export const HomePage = () => {
     limit: 10,
     enabled: Boolean(uzbekSlug),
   });
-
-  // ── Search results
-  const debouncedSearch = useDebounce(searchQuery, 0);
-  const { news: searchResults, isLoading: loadSearch } = useNews({
-    search: debouncedSearch,
-    limit: 9,
-    enabled: Boolean(debouncedSearch),
-  });
-
-  // ─────────────────────────────────────────────
-  if (searchQuery) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <SectionTitle>"{searchQuery}" — qidiruv natijalari</SectionTitle>
-        {loadSearch ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Array(6).fill(0).map((_, i) => <SkeletonCard key={i} />)}
-          </div>
-        ) : searchResults.length === 0 ? (
-          <p className="text-center py-16" style={{ color: 'var(--text-muted)' }}>{t('news.noNews')}</p>
-        ) : (
-          <ThreeColGrid news={searchResults} />
-        )}
-      </div>
-    );
-  }
 
   const hero = topRanked[0];
 

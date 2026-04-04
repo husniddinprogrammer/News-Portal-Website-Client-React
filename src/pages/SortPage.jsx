@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Calendar, X } from 'lucide-react';
 import { useNews } from '../hooks/useNews';
 import { ImageTopNews } from '../components/news/ImageTopNews';
 import { TextNews } from '../components/news/TextNews';
@@ -13,13 +14,24 @@ const SORT_OPTIONS = [
   { value: 'rank_desc',   label: 'Eng yuqori rank', icon: '⭐' },
   { value: 'id_desc',     label: 'Eng yangi',        icon: '🕐' },
   { value: 'most_viewed', label: "Ko'p ko'rilgan",   icon: '👁️' },
-  { value: 'most_liked',  label: 'Ko\'p likelangan', icon: '❤️' },
+  { value: 'most_liked',  label: "Ko'p likelangan",  icon: '❤️' },
 ];
 
-const buildUrl = (sort, category) => {
-  const params = new URLSearchParams({ sort });
-  if (category) params.set('category', category);
-  return `/news?${params.toString()}`;
+const TIME_OPTIONS = [
+  { value: 'today',      label: 'Bugun'     },
+  { value: 'this_week',  label: 'Shu hafta' },
+  { value: 'this_month', label: 'Shu oy'    },
+  { value: 'custom',     label: 'Sana'      },
+];
+
+const buildUrl = (params) => {
+  const p = new URLSearchParams();
+  if (params.sort)     p.set('sort',     params.sort);
+  if (params.category) p.set('category', params.category);
+  if (params.time && params.time !== 'custom') p.set('time', params.time);
+  if (params.dateFrom) p.set('dateFrom', params.dateFrom);
+  if (params.dateTo)   p.set('dateTo',   params.dateTo);
+  return `/news?${p.toString()}`;
 };
 
 export const SortPage = () => {
@@ -29,13 +41,44 @@ export const SortPage = () => {
 
   const sortParam     = searchParams.get('sort')     || 'id_desc';
   const categoryParam = searchParams.get('category') || '';
+  const timeParam     = searchParams.get('time')     || '';
+  const dateFromParam = searchParams.get('dateFrom') || '';
+  const dateToParam   = searchParams.get('dateTo')   || '';
+
+  // Date picker local state
+  const isCustom = Boolean(dateFromParam || dateToParam);
+  const [showDatePicker, setShowDatePicker] = useState(isCustom);
+  const [dateFrom, setDateFrom] = useState(dateFromParam);
+  const [dateTo, setDateTo]     = useState(dateToParam);
   const [page, setPage] = useState(1);
 
-  // sort yoki category o'zganda page 1 ga qayt
-  useEffect(() => { setPage(1); }, [sortParam, categoryParam]);
+  useEffect(() => { setPage(1); }, [sortParam, categoryParam, timeParam, dateFromParam, dateToParam]);
 
   const handleSort = (val) => {
-    navigate(buildUrl(val, categoryParam), { replace: true });
+    navigate(buildUrl({ sort: val, category: categoryParam, time: timeParam, dateFrom: dateFromParam, dateTo: dateToParam }), { replace: true });
+  };
+
+  const handleTime = (val) => {
+    if (val === 'custom') {
+      setShowDatePicker(true);
+      return;
+    }
+    setShowDatePicker(false);
+    setDateFrom('');
+    setDateTo('');
+    navigate(buildUrl({ sort: sortParam, category: categoryParam, time: val }), { replace: true });
+  };
+
+  const clearTime = () => {
+    setShowDatePicker(false);
+    setDateFrom('');
+    setDateTo('');
+    navigate(buildUrl({ sort: sortParam, category: categoryParam }), { replace: true });
+  };
+
+  const applyDateRange = () => {
+    if (!dateFrom && !dateTo) return;
+    navigate(buildUrl({ sort: sortParam, category: categoryParam, dateFrom, dateTo }), { replace: true });
   };
 
   const handlePage = (val) => {
@@ -43,22 +86,31 @@ export const SortPage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Aktiv time
+  const activeTime = isCustom ? 'custom' : timeParam;
+
   const { news: grid, pagination, isLoading: loadGrid, isError, refetch } = useNews({
     sort:     sortParam,
     category: categoryParam || undefined,
+    time:     (!isCustom && timeParam) ? timeParam : undefined,
+    dateFrom: dateFromParam || undefined,
+    dateTo:   dateToParam   || undefined,
     limit:    12,
     page,
   });
 
   const { news: latest, isLoading: loadLatest } = useNews({
-    sort: 'id_desc',
-    limit: 15,
+    sort: 'id_desc', limit: 15,
   });
 
   const activeOption = SORT_OPTIONS.find((o) => o.value === sortParam) || SORT_OPTIONS[1];
 
+  const btnBase = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 border';
+  const btnActive = 'bg-red-600 text-white border-red-600 shadow-sm';
+  const btnInactive = 'border-transparent hover:border-red-200 hover:text-red-600';
+
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
 
       {/* Header */}
       <div className="flex items-center gap-2 flex-wrap">
@@ -73,32 +125,98 @@ export const SortPage = () => {
         )}
       </div>
 
-      {/* Sort tabs */}
+      {/* Filters panel */}
       <div
-        className="flex items-center gap-2 flex-wrap p-3 rounded-xl border"
+        className="rounded-xl border p-4 space-y-4"
         style={{ background: 'var(--bg-secondary)', borderColor: 'var(--border)' }}
       >
-        {SORT_OPTIONS.map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => handleSort(opt.value)}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
-              sortParam === opt.value
-                ? 'bg-red-600 text-white shadow-md shadow-red-200'
-                : 'hover:bg-red-50 hover:text-red-600'
-            }`}
-            style={sortParam !== opt.value ? { color: 'var(--text-muted)' } : {}}
-          >
-            <span>{opt.icon}</span>
-            {opt.label}
-          </button>
-        ))}
+        {/* Sort */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-xs font-bold uppercase tracking-wider mr-1" style={{ color: 'var(--text-muted)' }}>
+            Sort:
+          </span>
+          {SORT_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => handleSort(opt.value)}
+              className={`${btnBase} flex items-center gap-1.5 ${sortParam === opt.value ? btnActive : btnInactive}`}
+              style={sortParam !== opt.value ? { color: 'var(--text-muted)', background: 'var(--bg)' } : {}}
+            >
+              <span>{opt.icon}</span>
+              {opt.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Divider */}
+        <div style={{ borderTop: '1px solid var(--border)' }} />
+
+        {/* Time filter */}
+        <div className="flex items-start gap-2 flex-wrap">
+          <span className="text-xs font-bold uppercase tracking-wider mr-1 mt-1.5" style={{ color: 'var(--text-muted)' }}>
+            Vaqt:
+          </span>
+          <div className="flex items-center gap-2 flex-wrap flex-1">
+            {TIME_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => handleTime(opt.value)}
+                className={`${btnBase} flex items-center gap-1 ${activeTime === opt.value ? btnActive : btnInactive}`}
+                style={activeTime !== opt.value ? { color: 'var(--text-muted)', background: 'var(--bg)' } : {}}
+              >
+                {opt.value === 'custom' && <Calendar size={12} />}
+                {opt.label}
+              </button>
+            ))}
+
+            {/* Clear time filter */}
+            {(activeTime) && (
+              <button
+                onClick={clearTime}
+                className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs text-red-500 hover:text-red-700 transition-colors"
+              >
+                <X size={12} /> Tozalash
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Custom date range */}
+        {showDatePicker && (
+          <div className="flex items-center gap-3 flex-wrap pl-14">
+            <div className="flex items-center gap-2">
+              <label className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>Dan:</label>
+              <input
+                type="date"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+                className="text-sm px-3 py-1.5 rounded-lg border outline-none focus:border-red-400 transition-colors"
+                style={{ background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text)' }}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <label className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>Gacha:</label>
+              <input
+                type="date"
+                value={dateTo}
+                onChange={(e) => setDateTo(e.target.value)}
+                className="text-sm px-3 py-1.5 rounded-lg border outline-none focus:border-red-400 transition-colors"
+                style={{ background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text)' }}
+              />
+            </div>
+            <button
+              onClick={applyDateRange}
+              disabled={!dateFrom && !dateTo}
+              className="px-4 py-1.5 rounded-lg bg-red-600 text-white text-xs font-semibold hover:bg-red-700 transition-colors disabled:opacity-40"
+            >
+              Qo'llash
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-        {/* Grid */}
         <div className="lg:col-span-2">
           {isError ? (
             <ErrorUI onRetry={refetch} />
@@ -118,7 +236,6 @@ export const SortPage = () => {
           )}
         </div>
 
-        {/* Sidebar */}
         <aside>
           <SectionTitle>{t('news.latest')}</SectionTitle>
           {loadLatest

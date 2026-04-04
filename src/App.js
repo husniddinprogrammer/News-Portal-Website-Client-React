@@ -7,6 +7,7 @@ import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { HomePage } from './pages/HomePage';
 import { SortPage } from './pages/SortPage';
+import { SearchPage } from './pages/SearchPage';
 import { CategoryPage } from './pages/CategoryPage';
 import { HashtagPage } from './pages/HashtagPage';
 import { NewsDetailPage } from './pages/NewsDetailPage';
@@ -38,6 +39,7 @@ function App() {
           <main>
             <Routes>
               <Route path="/" element={<HomePage />} />
+              <Route path="/search" element={<SearchPage />} />
               <Route path="/news" element={<SortPage />} />
               <Route path="/category/:slug" element={<CategoryPage />} />
               <Route path="/hashtag/:slug" element={<HashtagPage />} />
