@@ -4,8 +4,10 @@ import { formatDate } from '../../utils/date';
 import { formatViews, truncate } from '../../utils/formatters';
 import { Badge } from '../ui/Badge';
 import { LazyImage } from '../ui/LazyImage';
+import { useTranslit } from '../../hooks/useTranslit';
 
 export const ImageLeftNews = ({ news }) => {
+  const { tr } = useTranslit();
   if (!news) return null;
   const cover = news.images?.[0]?.url;
 
@@ -29,7 +31,7 @@ export const ImageLeftNews = ({ news }) => {
 
       <div className="flex-1 flex flex-col justify-between min-w-0">
         <div className="flex items-center gap-2 flex-wrap mb-1">
-          {news.category && <Badge>{news.category.name}</Badge>}
+          {news.category && <Badge>{tr(news.category.name)}</Badge>}
           <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
             {formatDate(news.createdAt)}
           </span>
@@ -41,7 +43,7 @@ export const ImageLeftNews = ({ news }) => {
           className="text-sm font-semibold leading-snug group-hover:text-red-600 transition-colors duration-200 line-clamp-2"
           style={{ color: 'var(--text)' }}
         >
-          {truncate(news.title, 100)}
+          {truncate(tr(news.title), 100)}
         </h4>
       </div>
     </Link>

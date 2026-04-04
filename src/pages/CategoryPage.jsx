@@ -11,17 +11,17 @@ import { Pagination } from '../components/ui/Pagination';
 import { SkeletonCard, SkeletonLeftImage, SkeletonText } from '../components/ui/Skeleton';
 import { ErrorUI } from '../components/ui/ErrorUI';
 
-const SORT_OPTIONS = [
-  { value: 'id_desc',        label: 'Eng yangi'       },
-  { value: 'rank_desc',      label: 'Eng yuqori rank' },
-  { value: 'most_viewed',    label: 'Ko\'p ko\'rilgan' },
-  { value: 'most_liked',     label: 'Ko\'p likelangan' },
-  { value: 'most_commented', label: 'Ko\'p izohli'     },
-];
-
 export const CategoryPage = () => {
   const { slug } = useParams();
   const { t } = useTranslation();
+
+  const SORT_OPTIONS = [
+    { value: 'id_desc',        label: t('sort.idDesc') },
+    { value: 'rank_desc',      label: t('sort.rankDesc') },
+    { value: 'most_viewed',    label: t('sort.mostViewed') },
+    { value: 'most_liked',     label: t('sort.mostLiked') },
+    { value: 'most_commented', label: t('sort.mostCommented') },
+  ];
 
   // Sort va page birgalikda — sort o'zganda page 1 ga qaytadi
   const [sort, setSort] = useState('id_desc');

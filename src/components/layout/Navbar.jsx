@@ -4,12 +4,14 @@ import { Search, Sun, Moon, Globe, X, Menu, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useCategories } from '../../hooks/useCategories';
+import { useTranslit } from '../../hooks/useTranslit';
 
 import { LANGUAGES } from '../../i18n';
 import i18n from '../../i18n';
 
 export const Navbar = () => {
   const { t } = useTranslation();
+  const { tr } = useTranslit();
   const navigate = useNavigate();
   const location = useLocation();
   const { dark, toggle } = useThemeStore();
@@ -101,7 +103,7 @@ export const Navbar = () => {
                 }`}
                 style={isActive(cat.slug) ? {} : { color: 'var(--text-muted)' }}
               >
-                {cat.name}
+                {tr(cat.name)}
               </Link>
             ))}
           </div>
@@ -226,7 +228,7 @@ export const Navbar = () => {
                   }`}
                   style={isActive(cat.slug) ? {} : { color: 'var(--text-muted)', borderColor: 'var(--border)' }}
                 >
-                  {cat.name}
+                  {tr(cat.name)}
                 </Link>
               ))}
             </div>

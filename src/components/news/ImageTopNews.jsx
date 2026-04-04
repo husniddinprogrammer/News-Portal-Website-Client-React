@@ -3,8 +3,10 @@ import { formatDate } from '../../utils/date';
 import { truncate } from '../../utils/formatters';
 import { Badge } from '../ui/Badge';
 import { LazyImage } from '../ui/LazyImage';
+import { useTranslit } from '../../hooks/useTranslit';
 
 export const ImageTopNews = ({ news }) => {
+  const { tr } = useTranslit();
   if (!news) return null;
   const cover = news.images?.[0]?.url;
 
@@ -17,11 +19,11 @@ export const ImageTopNews = ({ news }) => {
       {/* 16:9 Image */}
       <div className="relative overflow-hidden" style={{ paddingTop: '56.25%' }}>
         <div className="absolute inset-0">
-          <LazyImage src={cover} alt={news.title} className="w-full h-full group-hover:scale-105 transition-transform duration-500" />
+          <LazyImage src={cover} alt={tr(news.title)} className="w-full h-full group-hover:scale-105 transition-transform duration-500" />
         </div>
         {news.category && (
           <div className="absolute top-2 left-2 z-10">
-            <Badge>{news.category.name}</Badge>
+            <Badge>{tr(news.category.name)}</Badge>
           </div>
         )}
         {/* Gradient overlay */}
@@ -36,11 +38,11 @@ export const ImageTopNews = ({ news }) => {
           className="text-sm font-bold leading-snug mb-1.5 group-hover:text-red-600 transition-colors duration-200 line-clamp-2"
           style={{ color: 'var(--text)' }}
         >
-          {news.title}
+          {tr(news.title)}
         </h3>
         {news.shortDescription && (
           <p className="text-xs leading-relaxed line-clamp-2" style={{ color: 'var(--text-muted)' }}>
-            {truncate(news.shortDescription, 100)}
+            {truncate(tr(news.shortDescription), 100)}
           </p>
         )}
       </div>

@@ -37,12 +37,33 @@
     "retry": "Qayta urinish",
     "prev": "Oldingi",
     "next": "Keyingi",
-    "page": "Sahifa"
+    "page": "Sahifa",
+    "more": "Ko'proq"
+  },
+  "sort": {
+    "sortLabel": "Sort",
+    "timeLabel": "Vaqt",
+    "from": "Dan",
+    "to": "Gacha",
+    "apply": "Qo'llash",
+    "clear": "Tozalash",
+    "rankDesc": "Eng yuqori rank",
+    "idDesc": "Eng yangi",
+    "mostViewed": "Ko'p ko'rilgan",
+    "mostLiked": "Ko'p likelangan",
+    "mostCommented": "Ko'p izohli",
+    "today": "Bugun",
+    "thisWeek": "Shu hafta",
+    "thisMonth": "Shu oy",
+    "custom": "Sana"
   },
   "footer": {
     "rights": "Barcha huquqlar himoyalangan",
     "about": "Biz haqimizda",
     "contact": "Aloqa",
-    "privacy": "Maxfiylik siyosati"
+    "privacy": "Maxfiylik siyosati",
+    "tagline": "O'zbekistonning eng so'nggi yangiliklari — tez, ishonchli, sifatli.",
+    "categoriesTitle": "Kategoriyalar",
+    "contactTitle": "Aloqa"
   }
 }

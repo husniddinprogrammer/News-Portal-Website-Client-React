@@ -15,6 +15,7 @@ import { ImageTopNews } from '../components/news/ImageTopNews';
 import { SectionTitle } from '../components/news/SectionTitle';
 import { SkeletonCard, SkeletonText, Skeleton } from '../components/ui/Skeleton';
 import { ErrorUI } from '../components/ui/ErrorUI';
+import { useTranslit } from '../hooks/useTranslit';
 
 // ─── Like button ────────────────────────────────────────────────────────────
 const LikeButton = ({ newsId, initialCount }) => {
@@ -92,6 +93,7 @@ const CommentForm = ({ newsId }) => {
 export const NewsDetailPage = () => {
   const { slug } = useParams();
   const { t } = useTranslation();
+  const { tr, trHtml } = useTranslit();
 
   const { data: news, isLoading, isError, refetch } = useNewsDetail(slug);
 
@@ -135,7 +137,7 @@ export const NewsDetailPage = () => {
           {/* Meta bar */}
           <div className="flex flex-wrap items-center gap-3">
             {news.category && (
-              <Badge to={`/category/${news.category.slug}`}>{news.category.name}</Badge>
+              <Badge to={`/category/${news.category.slug}`}>{tr(news.category.name)}</Badge>
             )}
             <span className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-muted)' }}>
               <Calendar size={13} /> {formatDateTime(news.createdAt)}
@@ -150,7 +152,7 @@ export const NewsDetailPage = () => {
 
           {/* Title */}
           <h1 className="text-2xl md:text-3xl font-black leading-tight" style={{ color: 'var(--text)' }}>
-            {news.title}
+            {tr(news.title)}
           </h1>
 
           {/* Like button */}
@@ -161,7 +163,7 @@ export const NewsDetailPage = () => {
           {/* Content */}
           <div
             className="news-content text-base leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: news.content }}
+            dangerouslySetInnerHTML={{ __html: trHtml(news.content) }}
           />
 
           {/* Author */}
@@ -176,7 +178,7 @@ export const NewsDetailPage = () => {
               <div>
                 <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{t('detail.author')}</p>
                 <p className="font-semibold text-sm" style={{ color: 'var(--text)' }}>
-                  {news.author.name} {news.author.surname}
+                  {tr(news.author.name)} {tr(news.author.surname)}
                   <span className="font-normal ml-1" style={{ color: 'var(--text-muted)' }}>
                     @{news.author.username}
                   </span>
@@ -195,7 +197,7 @@ export const NewsDetailPage = () => {
                   className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-full border font-medium transition-colors hover:bg-red-50 hover:text-red-600 hover:border-red-200"
                   style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
                 >
-                  <Tag size={12} /> {h.name}
+                  <Tag size={12} /> {tr(h.name)}
                 </Link>
               ))}
             </div>

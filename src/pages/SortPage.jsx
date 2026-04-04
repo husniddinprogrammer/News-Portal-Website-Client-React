@@ -10,19 +10,12 @@ import { Pagination } from '../components/ui/Pagination';
 import { SkeletonCard, SkeletonText } from '../components/ui/Skeleton';
 import { ErrorUI } from '../components/ui/ErrorUI';
 
-const SORT_OPTIONS = [
-  { value: 'rank_desc',   label: 'Eng yuqori rank', icon: '⭐' },
-  { value: 'id_desc',     label: 'Eng yangi',        icon: '🕐' },
-  { value: 'most_viewed', label: "Ko'p ko'rilgan",   icon: '👁️' },
-  { value: 'most_liked',  label: "Ko'p likelangan",  icon: '❤️' },
-];
-
-const TIME_OPTIONS = [
-  { value: 'today',      label: 'Bugun'     },
-  { value: 'this_week',  label: 'Shu hafta' },
-  { value: 'this_month', label: 'Shu oy'    },
-  { value: 'custom',     label: 'Sana'      },
-];
+const SORT_ICONS = {
+  rank_desc:   '⭐',
+  id_desc:     '🕐',
+  most_viewed: '👁️',
+  most_liked:  '❤️',
+};
 
 const buildUrl = (params) => {
   const p = new URLSearchParams();
@@ -45,7 +38,6 @@ export const SortPage = () => {
   const dateFromParam = searchParams.get('dateFrom') || '';
   const dateToParam   = searchParams.get('dateTo')   || '';
 
-  // Date picker local state
   const isCustom = Boolean(dateFromParam || dateToParam);
   const [showDatePicker, setShowDatePicker] = useState(isCustom);
   const [dateFrom, setDateFrom] = useState(dateFromParam);
@@ -53,6 +45,21 @@ export const SortPage = () => {
   const [page, setPage] = useState(1);
 
   useEffect(() => { setPage(1); }, [sortParam, categoryParam, timeParam, dateFromParam, dateToParam]);
+
+  // Build translated options inside component so t() is reactive
+  const SORT_OPTIONS = [
+    { value: 'rank_desc',   label: t('sort.rankDesc'),   icon: SORT_ICONS.rank_desc },
+    { value: 'id_desc',     label: t('sort.idDesc'),     icon: SORT_ICONS.id_desc },
+    { value: 'most_viewed', label: t('sort.mostViewed'), icon: SORT_ICONS.most_viewed },
+    { value: 'most_liked',  label: t('sort.mostLiked'),  icon: SORT_ICONS.most_liked },
+  ];
+
+  const TIME_OPTIONS = [
+    { value: 'today',      label: t('sort.today') },
+    { value: 'this_week',  label: t('sort.thisWeek') },
+    { value: 'this_month', label: t('sort.thisMonth') },
+    { value: 'custom',     label: t('sort.custom') },
+  ];
 
   const handleSort = (val) => {
     navigate(buildUrl({ sort: val, category: categoryParam, time: timeParam, dateFrom: dateFromParam, dateTo: dateToParam }), { replace: true });
@@ -86,7 +93,6 @@ export const SortPage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Aktiv time
   const activeTime = isCustom ? 'custom' : timeParam;
 
   const { news: grid, pagination, isLoading: loadGrid, isError, refetch } = useNews({
@@ -133,7 +139,7 @@ export const SortPage = () => {
         {/* Sort */}
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-xs font-bold uppercase tracking-wider mr-1" style={{ color: 'var(--text-muted)' }}>
-            Sort:
+            {t('sort.sortLabel')}:
           </span>
           {SORT_OPTIONS.map((opt) => (
             <button
@@ -154,7 +160,7 @@ export const SortPage = () => {
         {/* Time filter */}
         <div className="flex items-start gap-2 flex-wrap">
           <span className="text-xs font-bold uppercase tracking-wider mr-1 mt-1.5" style={{ color: 'var(--text-muted)' }}>
-            Vaqt:
+            {t('sort.timeLabel')}:
           </span>
           <div className="flex items-center gap-2 flex-wrap flex-1">
             {TIME_OPTIONS.map((opt) => (
@@ -169,13 +175,12 @@ export const SortPage = () => {
               </button>
             ))}
 
-            {/* Clear time filter */}
-            {(activeTime) && (
+            {activeTime && (
               <button
                 onClick={clearTime}
                 className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs text-red-500 hover:text-red-700 transition-colors"
               >
-                <X size={12} /> Tozalash
+                <X size={12} /> {t('sort.clear')}
               </button>
             )}
           </div>
@@ -185,7 +190,7 @@ export const SortPage = () => {
         {showDatePicker && (
           <div className="flex items-center gap-3 flex-wrap pl-14">
             <div className="flex items-center gap-2">
-              <label className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>Dan:</label>
+              <label className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>{t('sort.from')}:</label>
               <input
                 type="date"
                 value={dateFrom}
@@ -195,7 +200,7 @@ export const SortPage = () => {
               />
             </div>
             <div className="flex items-center gap-2">
-              <label className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>Gacha:</label>
+              <label className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>{t('sort.to')}:</label>
               <input
                 type="date"
                 value={dateTo}
@@ -209,7 +214,7 @@ export const SortPage = () => {
               disabled={!dateFrom && !dateTo}
               className="px-4 py-1.5 rounded-lg bg-red-600 text-white text-xs font-semibold hover:bg-red-700 transition-colors disabled:opacity-40"
             >
-              Qo'llash
+              {t('sort.apply')}
             </button>
           </div>
         )}

@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useCategories } from '../../hooks/useCategories';
+import { useTranslit } from '../../hooks/useTranslit';
 
 export const Footer = () => {
   const { t } = useTranslation();
+  const { tr } = useTranslit();
+  const { data: categories = [] } = useCategories();
   const year = new Date().getFullYear();
 
   return (
@@ -23,34 +27,34 @@ export const Footer = () => {
               </span>
             </Link>
             <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-              O'zbekistonning eng so'nggi yangiliklari — tez, ishonchli, sifatli.
+              {t('footer.tagline')}
             </p>
           </div>
 
-          {/* Links */}
+          {/* Categories */}
           <div>
-            <h4 className="font-bold text-sm mb-3 text-red-600 uppercase tracking-wider">Sahifalar</h4>
+            <h4 className="font-bold text-sm mb-3 text-red-600 uppercase tracking-wider">
+              {t('footer.categoriesTitle')}
+            </h4>
             <div className="space-y-2">
-              {[
-                { label: t('footer.about'), href: '#' },
-                { label: t('footer.contact'), href: '#' },
-                { label: t('footer.privacy'), href: '#' },
-              ].map(({ label, href }) => (
-                <a
-                  key={label}
-                  href={href}
+              {categories.slice(0, 6).map((cat) => (
+                <Link
+                  key={cat.id}
+                  to={`/category/${cat.slug}`}
                   className="block text-sm transition-colors duration-200 hover:text-red-600"
                   style={{ color: 'var(--text-muted)' }}
                 >
-                  {label}
-                </a>
+                  {tr(cat.name)}
+                </Link>
               ))}
             </div>
           </div>
 
           {/* Contact */}
           <div>
-            <h4 className="font-bold text-sm mb-3 text-red-600 uppercase tracking-wider">Aloqa</h4>
+            <h4 className="font-bold text-sm mb-3 text-red-600 uppercase tracking-wider">
+              {t('footer.contactTitle')}
+            </h4>
             <div className="space-y-1.5 text-sm" style={{ color: 'var(--text-muted)' }}>
               <p>info@newsportal.uz</p>
               <p>+998 71 000 00 00</p>

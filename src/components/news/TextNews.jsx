@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import { formatDate } from '../../utils/date';
 import { formatViews, truncate } from '../../utils/formatters';
+import { useTranslit } from '../../hooks/useTranslit';
 
 export const TextNews = ({ news }) => {
+  const { tr } = useTranslit();
   if (!news) return null;
 
   return (
@@ -20,12 +22,12 @@ export const TextNews = ({ news }) => {
           className="text-sm font-semibold leading-snug mb-1.5 group-hover:text-red-600 transition-colors duration-200 line-clamp-2"
           style={{ color: 'var(--text)' }}
         >
-          {truncate(news.title, 100)}
+          {truncate(tr(news.title), 100)}
         </h4>
         <div className="flex items-center justify-between text-xs" style={{ color: 'var(--text-muted)' }}>
           <div className="flex items-center gap-2">
             {news.category && (
-              <span className="font-semibold text-red-500">{news.category.name}</span>
+              <span className="font-semibold text-red-500">{tr(news.category.name)}</span>
             )}
             <span>{formatDate(news.createdAt)}</span>
           </div>
