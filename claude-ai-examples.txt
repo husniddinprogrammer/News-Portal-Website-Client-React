@@ -1,0 +1,238 @@
+1-TASK 
+You are a senior frontend engineer. Build a production-ready News Client Website using React, Tailwind CSS, and modern frontend architecture.
+
+Project: News Portal (Client Side)
+
+Design Requirements:
+- Modern + Material UI style
+- Primary color: RED
+- Clean typography, spacing, shadows
+- Fully responsive (desktop, tablet, mobile)
+- Smooth hover, transitions
+
+Tech Stack:
+- React (Next.js App Router preferred for SEO)
+- Tailwind CSS
+- State: Zustand or React Query
+- API: Axios with interceptors
+- i18n: react-i18next
+- Date: dayjs (format: HH:mm / DD.MM.YYYY)
+- Icons: Lucide React
+
+Language:
+- uzb-latin
+- uzb-cyrillic
+- Language switcher in navbar (globe icon)
+
+Theme:
+- Light/Dark mode toggle (moon/sun)
+- Persist in localStorage
+
+Images:
+- All images must follow 16:9 ratio
+- Use object-cover and responsive sizes
+
+Use this API documentation:
+:contentReference[oaicite:0]{index=0}
+
+--------------------------------------------------
+
+GLOBAL LAYOUT:
+
+Navbar:
+- Left: Logo
+- Center: Categories (dynamic from API)
+- Right:
+  - Search input
+  - Theme toggle (sun/moon)
+  - Language switch (globe)
+
+Footer:
+- Simple modern footer
+- Links + copyright
+
+--------------------------------------------------
+
+PAGES:
+
+1. HOME PAGE
+
+Layout:
+Main section:
+- Left (2/3 width):
+  1. Top news (rank highest)
+     - Left: image
+     - Right: title + shortDescription
+
+  2. Top rating grid:
+     - 3 columns
+     - Each column → 3 news cards (ImageTopNews)
+
+- Right (1/3 width):
+  - Latest news (TextNews 5–10 items)
+
+Sections:
+
+1. Weekly most viewed:
+- Left: 5 ImageLeftNews
+- Right: 5 ImageLeftNews
+
+2. World news (latest):
+- 3 columns × 3 ImageTopNews
+
+3. Most liked:
+- 3 columns × 3 ImageTopNews
+
+4. Uzbekistan news:
+- Left: 5 ImageLeftNews
+- Right: 5 ImageLeftNews
+
+--------------------------------------------------
+
+2. CATEGORY PAGE
+
+- Same layout as home
+- All data filtered by category slug
+
+API:
+GET /news?category={slug}
+
+--------------------------------------------------
+
+3. HASHTAG PAGE
+
+- Same layout
+- Filter by hashtag
+
+API:
+GET /news?hashtag={slug}
+
+--------------------------------------------------
+
+4. NEWS DETAIL PAGE
+
+Layout:
+Left (2/3):
+- Top:
+  - Category badge
+  - Date
+  - View count
+  - Like count
+  - Like button (toggle API)
+
+- Title
+- Content (render HTML from backend)
+
+- Author section
+
+- Hashtags (badges)
+
+- Comment form:
+  - username
+  - comment text
+
+- Comments list
+
+Right (1/3):
+- Latest news list (10–15 TextNews)
+
+Below:
+- Similar news (3 columns × 5 ImageTopNews)
+
+API:
+GET /news/slug/:slug
+POST /likes
+GET /comments/news/:newsId
+POST /comments
+
+--------------------------------------------------
+
+COMPONENTS:
+
+1. Navbar
+2. Footer
+
+3. TextNews
+- Title
+- Bottom:
+  - Left: category | date
+  - Right: view count
+
+4. ImageTopNews
+- Image (16:9)
+- Category badge (top-left)
+- Date
+- Title
+- Short description
+
+5. ImageLeftNews
+- Left: image
+- Right:
+  - Top: badge | date | views
+  - Bottom: title
+
+--------------------------------------------------
+
+API INTEGRATION:
+
+News list:
+GET /news with:
+- sort
+- time
+- category
+- hashtag
+- search
+
+Detail:
+GET /news/slug/:slug
+
+Likes:
+POST /likes (toggle)
+
+Comments:
+GET /comments/news/:newsId
+POST /comments
+
+Categories:
+GET /categories
+
+Hashtags:
+GET /hashtags
+
+--------------------------------------------------
+
+FEATURES:
+
+- Search (debounced input)
+- Infinite scroll or pagination
+- Skeleton loading
+- Error UI
+- Lazy image loading
+- SEO meta tags (Next.js)
+
+--------------------------------------------------
+
+CODE STRUCTURE:
+
+- /components
+- /pages or /app
+- /services (API)
+- /hooks
+- /store
+- /utils (date, formatters)
+- /i18n
+
+--------------------------------------------------
+
+OUTPUT:
+
+- Full folder structure
+- All pages
+- All reusable components
+- API service layer
+- i18n setup
+- Theme system
+- Example UI components
+- Clean, scalable code
+
+Make it production-level, clean, and optimized.

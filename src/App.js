@@ -1,24 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useThemeStore } from './store/useThemeStore';
+import { Navbar } from './components/layout/Navbar';
+import { Footer } from './components/layout/Footer';
+import { HomePage } from './pages/HomePage';
+import { CategoryPage } from './pages/CategoryPage';
+import { HashtagPage } from './pages/HashtagPage';
+import { NewsDetailPage } from './pages/NewsDetailPage';
+import './i18n';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+const ThemeInit = () => {
+  const init = useThemeStore((s) => s.init);
+  useEffect(() => { init(); }, [init]);
+  return null;
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <ThemeInit />
+        <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+          <Navbar />
+          <main>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/category/:slug" element={<CategoryPage />} />
+              <Route path="/hashtag/:slug" element={<HashtagPage />} />
+              <Route path="/news/:slug" element={<NewsDetailPage />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 

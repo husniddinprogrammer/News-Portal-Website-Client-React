@@ -1,0 +1,48 @@
+{
+  "nav": {
+    "search": "Qidirish...",
+    "home": "Bosh sahifa"
+  },
+  "news": {
+    "views": "ko'rildi",
+    "likes": "like",
+    "comments": "izoh",
+    "readMore": "Batafsil",
+    "noNews": "Yangiliklar topilmadi",
+    "topNews": "Eng muhim yangiliklar",
+    "topRating": "Eng yuqori reytingli",
+    "latest": "So'nggi yangiliklar",
+    "mostViewed": "Haftalik eng ko'p ko'rilgan",
+    "worldNews": "Jahon yangiliklari",
+    "mostLiked": "Eng ko'p likelangan",
+    "uzbekistan": "O'zbekiston yangiliklari"
+  },
+  "detail": {
+    "author": "Muallif",
+    "share": "Ulashish",
+    "like": "Yoqdi",
+    "liked": "Yoqdi ✓",
+    "similarNews": "O'xshash yangiliklar"
+  },
+  "comment": {
+    "title": "Izohlar",
+    "placeholder": "Izohingizni yozing...",
+    "usernamePlaceholder": "Foydalanuvchi nomingiz",
+    "submit": "Yuborish",
+    "noComments": "Hali izoh yo'q"
+  },
+  "common": {
+    "loading": "Yuklanmoqda...",
+    "error": "Xato yuz berdi",
+    "retry": "Qayta urinish",
+    "prev": "Oldingi",
+    "next": "Keyingi",
+    "page": "Sahifa"
+  },
+  "footer": {
+    "rights": "Barcha huquqlar himoyalangan",
+    "about": "Biz haqimizda",
+    "contact": "Aloqa",
+    "privacy": "Maxfiylik siyosati"
+  }
+}
