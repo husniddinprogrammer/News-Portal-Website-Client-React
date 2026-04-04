@@ -31,11 +31,6 @@ export const HeroNews = ({ news }) => {
       <div className="flex flex-col justify-between p-5 md:p-7 flex-1 gap-4">
         <div className="flex items-center gap-2 flex-wrap">
           {news.category && <Badge>{news.category.name}</Badge>}
-          {news.rank >= 8 && (
-            <span className="text-xs font-bold text-amber-500 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
-              ⭐ Top {news.rank}
-            </span>
-          )}
         </div>
 
         <div>

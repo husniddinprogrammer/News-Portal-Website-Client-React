@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Eye, Heart, MessageCircle, User, Calendar, Tag } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -93,8 +93,6 @@ export const NewsDetailPage = () => {
   const { slug } = useParams();
   const { t } = useTranslation();
 
-  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [slug]);
-
   const { data: news, isLoading, isError, refetch } = useNewsDetail(slug);
 
   const { data: commentsData, isLoading: loadComments } = useComments(news?.id);
@@ -106,7 +104,7 @@ export const NewsDetailPage = () => {
     enabled: Boolean(news?.category?.slug),
   });
 
-  const { news: latestSidebar } = useNews({ sort: 'id_desc', limit: 15 });
+  const { news: latestSidebar } = useNews({ sort: 'id_desc', limit: 20 });
 
   // ── Loading state
   if (isLoading) {

@@ -26,8 +26,12 @@ const api = axios.create({
   timeout: 15000,
 });
 
-// Request interceptor — attach token
+// Request interceptor — attach token + dev logging
 api.interceptors.request.use((config) => {
+  if (process.env.NODE_ENV === 'development') {
+    const url = config.url + (config.params ? '?' + new URLSearchParams(config.params).toString() : '');
+    console.debug('[API]', config.method?.toUpperCase(), url);
+  }
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }

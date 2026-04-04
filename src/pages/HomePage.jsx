@@ -2,6 +2,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNews } from '../hooks/useNews';
 import { useDebounce } from '../hooks/useDebounce';
+import { useCategories } from '../hooks/useCategories';
 import { HeroNews } from '../components/news/HeroNews';
 import { ImageTopNews } from '../components/news/ImageTopNews';
 import { ImageLeftNews } from '../components/news/ImageLeftNews';
@@ -40,22 +41,37 @@ export const HomePage = () => {
   const { news: topRanked, isLoading: loadHero } = useNews({ sort: 'rank_desc', limit: 1 });
 
   // ── Top rating grid (rank_desc, 9 items)
-  const { news: topRating, isLoading: loadRating } = useNews({ sort: 'rank_desc', limit: 9, page: 1 });
+  const { news: topRating, isLoading: loadRating } = useNews({ sort: 'rank_desc', limit: 10, page: 1 });
 
   // ── Latest sidebar (id_desc, 10)
-  const { news: latest, isLoading: loadLatest } = useNews({ sort: 'id_desc', limit: 10 });
+  const { news: latest, isLoading: loadLatest } = useNews({ sort: 'id_desc', limit: 15 });
 
-  // ── Weekly most viewed
-  const { news: weekViewed, isLoading: loadWeek } = useNews({ sort: 'most_viewed', time: 'this_week', limit: 10 });
+  // ── Most viewed
+  const { news: weekViewed, isLoading: loadWeek } = useNews({
+    sort: 'most_viewed',
+    limit: 10,
+  });
 
   // ── World news (latest) — category "world" — fallback to latest
-  const { news: worldNews, isLoading: loadWorld } = useNews({ sort: 'id_desc', limit: 9 });
+  const { news: worldNews, isLoading: loadWorld } = useNews({ sort: 'id_desc', limit: 10 });
 
   // ── Most liked
   const { news: mostLiked, isLoading: loadLiked } = useNews({ sort: 'most_liked', limit: 9 });
 
-  // ── Uzbekistan news — category slug "uzbekistan"
-  const { news: uzbekNews, isLoading: loadUzbek } = useNews({ category: 'uzbekistan', sort: 'id_desc', limit: 10 });
+  // ── Find category slugs dynamically
+  const { data: categories = [] } = useCategories();
+  const uzbekSlug = categories.find((c) =>
+    /uzbek|o['']zbek|ўзбек/i.test(c.name)
+  )?.slug;
+  const worldSlug = categories.find((c) =>
+    /world|jahon|мировой|халқаро/i.test(c.name)
+  )?.slug;
+  const { news: uzbekNews, isLoading: loadUzbek } = useNews({
+    category: uzbekSlug,
+    sort: 'id_desc',
+    limit: 10,
+    enabled: Boolean(uzbekSlug),
+  });
 
   // ── Search results
   const debouncedSearch = useDebounce(searchQuery, 0);
@@ -94,47 +110,47 @@ export const HomePage = () => {
         <div className="lg:col-span-2 space-y-8">
           {/* Hero */}
           <section>
-            <SectionTitle>{t('news.topNews')}</SectionTitle>
+            <SectionTitle more="/news?sort=rank_desc">{t('news.topNews')}</SectionTitle>
             {loadHero ? <SkeletonCard /> : hero ? <HeroNews news={hero} /> : null}
           </section>
 
           {/* Top rating grid */}
           <section>
-            <SectionTitle>{t('news.topRating')}</SectionTitle>
+            <SectionTitle more="/news?sort=rank_desc">{t('news.topRating')}</SectionTitle>
             <ThreeColGrid news={topRating.slice(1)} loading={loadRating} />
           </section>
         </div>
 
         {/* Right sidebar — latest */}
         <aside>
-          <SectionTitle>{t('news.latest')}</SectionTitle>
+          <SectionTitle more="/news?sort=id_desc">{t('news.latest')}</SectionTitle>
           {loadLatest
             ? Array(8).fill(0).map((_, i) => <SkeletonText key={i} />)
             : latest.map((n) => <TextNews key={n.id} news={n} />)}
         </aside>
       </div>
 
-      {/* ── WEEKLY MOST VIEWED ── */}
-      <section>
-        <SectionTitle>{t('news.mostViewed')}</SectionTitle>
-        <TwoColLeft news={weekViewed} loading={loadWeek} />
-      </section>
-
       {/* ── WORLD NEWS ── */}
       <section>
-        <SectionTitle>{t('news.worldNews')}</SectionTitle>
-        <ThreeColGrid news={worldNews} loading={loadWorld} />
+        <SectionTitle more={worldSlug ? `/news?sort=most_viewed&category=${worldSlug}` : '/news?sort=most_viewed'}>{t('news.worldNews')}</SectionTitle>
+        <TwoColLeft news={worldNews} loading={loadWorld} />
+      </section>
+
+      {/* ── MOST VIEWED ── */}
+      <section>
+        <SectionTitle more="/news?sort=most_viewed">{t('news.mostViewed')}</SectionTitle>
+        <ThreeColGrid news={weekViewed} loading={loadWeek} />
       </section>
 
       {/* ── MOST LIKED ── */}
       <section>
-        <SectionTitle>{t('news.mostLiked')}</SectionTitle>
+        <SectionTitle more="/news?sort=most_liked">{t('news.mostLiked')}</SectionTitle>
         <ThreeColGrid news={mostLiked} loading={loadLiked} />
       </section>
 
       {/* ── UZBEKISTAN NEWS ── */}
       <section>
-        <SectionTitle>{t('news.uzbekistan')}</SectionTitle>
+        <SectionTitle more={uzbekSlug ? `/category/${uzbekSlug}` : undefined}>{t('news.uzbekistan')}</SectionTitle>
         <TwoColLeft news={uzbekNews} loading={loadUzbek} />
       </section>
 

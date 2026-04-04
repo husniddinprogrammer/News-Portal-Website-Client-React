@@ -7,9 +7,11 @@ import { newsService } from '../services/news.service';
  * Null / undefined / empty-string values are stripped so that
  * useNews({ category: '' }) and useNews({}) share the same cache entry.
  */
+const EMPTY_VALUES = new Set([null, undefined, '', 'all']);
+
 const buildQueryKey = (params) => {
   const clean = Object.fromEntries(
-    Object.entries(params).filter(([, v]) => v !== null && v !== undefined && v !== '')
+    Object.entries(params).filter(([, v]) => !EMPTY_VALUES.has(v))
   );
   // Deterministic key — sort entries so order doesn't matter
   return ['news', Object.fromEntries(Object.entries(clean).sort())];

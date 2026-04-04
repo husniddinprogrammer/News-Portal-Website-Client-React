@@ -1,11 +1,15 @@
 import api from './api';
 
 /**
- * Build clean query params — remove null/undefined/empty string values
+ * Build clean query params.
+ * Strips: null, undefined, empty string, and 'all'
+ * ('all' means "no filter" per the API contract)
  */
+const EMPTY_VALUES = new Set([null, undefined, '', 'all']);
+
 const buildParams = (params = {}) =>
   Object.fromEntries(
-    Object.entries(params).filter(([, v]) => v !== null && v !== undefined && v !== '')
+    Object.entries(params).filter(([, v]) => !EMPTY_VALUES.has(v))
   );
 
 export const newsService = {
