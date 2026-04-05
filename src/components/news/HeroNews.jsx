@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Eye, Heart, Clock } from 'lucide-react';
+import { Eye, Heart, Clock, ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { formatDate } from '../../utils/date';
 import { formatViews, truncate } from '../../utils/formatters';
@@ -16,49 +16,66 @@ export const HeroNews = ({ news }) => {
   return (
     <Link
       to={`/news/${news.slug}`}
-      className="group flex flex-col md:flex-row rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-0.5"
-      style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
+      className="group relative block rounded-2xl overflow-hidden"
+      style={{
+        minHeight: 420,
+        boxShadow: 'var(--shadow-lg)',
+      }}
     >
-      {/* Image — full on mobile, 55% on md */}
-      <div className="relative w-full md:w-[55%] shrink-0 overflow-hidden" style={{ minHeight: 220 }}>
+      {/* Full-bleed image */}
+      <div className="absolute inset-0">
         <LazyImage
           src={cover}
-          alt={news.title}
-          className="absolute inset-0 w-full h-full group-hover:scale-105 transition-transform duration-700"
-          style={{ position: 'absolute', inset: 0 }}
+          alt={tr(news.title)}
+          className="w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out"
         />
-        {/* Red accent bar on left edge */}
-        <div className="hidden md:block absolute left-0 top-0 bottom-0 w-1 bg-red-600 z-10" />
       </div>
 
-      {/* Content */}
-      <div className="flex flex-col justify-between p-5 md:p-7 flex-1 gap-4">
-        <div className="flex items-center gap-2 flex-wrap">
-          {news.category && <Badge>{tr(news.category.name)}</Badge>}
-        </div>
+      {/* Multi-stop gradient overlay */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.15) 75%, transparent 100%)',
+        }}
+      />
 
-        <div>
-          <h2
-            className="text-xl md:text-2xl font-black leading-tight mb-3 group-hover:text-red-600 transition-colors duration-200 line-clamp-3"
-            style={{ color: 'var(--text)' }}
-          >
-            {tr(news.title)}
-          </h2>
-          {news.shortDescription && (
-            <p className="text-sm leading-relaxed line-clamp-3" style={{ color: 'var(--text-muted)' }}>
-              {truncate(tr(news.shortDescription), 180)}
-            </p>
-          )}
+      {/* Top: category badge */}
+      {news.category && (
+        <div className="absolute top-5 left-5 z-10">
+          <Badge variant="glass">{tr(news.category.name)}</Badge>
         </div>
+      )}
 
-        <div className="flex items-center justify-between pt-3" style={{ borderTop: '1px solid var(--border)' }}>
-          <div className="flex items-center gap-4 text-xs" style={{ color: 'var(--text-muted)' }}>
-            <span className="flex items-center gap-1.5"><Clock size={13} /> {formatDate(news.createdAt)}</span>
-            <span className="flex items-center gap-1.5"><Eye size={13} /> {formatViews(news.viewCount)}</span>
-            <span className="flex items-center gap-1.5"><Heart size={13} /> {formatViews(news.likeCount)}</span>
+      {/* Bottom: content */}
+      <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 z-10">
+        <h2
+          className="text-white font-black leading-tight mb-3 line-clamp-3 group-hover:text-red-300 transition-colors duration-300"
+          style={{ fontSize: 'clamp(1.25rem, 3vw, 1.875rem)', letterSpacing: '-0.02em' }}
+        >
+          {tr(news.title)}
+        </h2>
+
+        {news.shortDescription && (
+          <p className="text-white/70 text-sm leading-relaxed line-clamp-2 mb-4 max-w-2xl">
+            {truncate(tr(news.shortDescription), 160)}
+          </p>
+        )}
+
+        {/* Meta row */}
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="flex items-center gap-4 text-white/60 text-xs font-medium">
+            <span className="flex items-center gap-1.5">
+              <Clock size={12} /> {formatDate(news.createdAt)}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Eye size={12} /> {formatViews(news.viewCount)}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Heart size={12} /> {formatViews(news.likeCount)}
+            </span>
           </div>
-          <span className="text-xs font-bold text-red-600 group-hover:gap-2 flex items-center gap-1 transition-all duration-200">
-            {t('news.readMore')} →
+          <span className="flex items-center gap-1.5 text-xs font-bold text-red-400 group-hover:text-red-300 group-hover:gap-2.5 transition-all duration-200">
+            {t('news.readMore')} <ArrowRight size={13} />
           </span>
         </div>
       </div>

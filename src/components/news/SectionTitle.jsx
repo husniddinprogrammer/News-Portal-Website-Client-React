@@ -1,27 +1,36 @@
 import { Link } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export const SectionTitle = ({ children, more }) => {
   const { t } = useTranslation();
   return (
-    <div className="flex items-center justify-between mb-5">
+    <div className="flex items-center justify-between mb-6">
+      {/* Left: title with red accent bar */}
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-1">
-          <div className="w-1.5 h-6 bg-red-600 rounded-full" />
-          <div className="w-1 h-4 bg-red-300 rounded-full" />
-        </div>
-        <h2 className="text-lg font-black tracking-tight" style={{ color: 'var(--text)' }}>
+        <div
+          className="w-1 h-6 rounded-full bg-red-600 shrink-0"
+          style={{ boxShadow: '0 0 8px rgba(220,38,38,0.45)' }}
+        />
+        <h2
+          className="text-base font-extrabold uppercase tracking-wider"
+          style={{ color: 'var(--text)', letterSpacing: '0.06em' }}
+        >
           {children}
         </h2>
       </div>
+
+      {/* Right: "Ko'proq" link */}
       {more && (
         <Link
           to={more}
-          className="flex items-center gap-1 text-xs font-semibold text-red-600 hover:text-red-700 transition-colors duration-200 group"
+          className="flex items-center gap-1 text-xs font-semibold text-red-600 hover:text-red-700 group transition-colors duration-200"
         >
           {t('common.more')}
-          <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-200" />
+          <ArrowRight
+            size={13}
+            className="group-hover:translate-x-0.5 transition-transform duration-200"
+          />
         </Link>
       )}
     </div>
