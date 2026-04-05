@@ -85,15 +85,14 @@ export const Navbar = () => {
             to="/"
             className="flex items-center gap-2.5 shrink-0 group"
           >
-            <div
-              className="w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-200 group-hover:scale-105"
-              style={{
-                background: 'var(--red)',
-                boxShadow: 'var(--shadow-red)',
-              }}
-            >
-              <span className="text-white font-black text-sm leading-none">N</span>
-            </div>
+            <img
+              src="/logo192.png"
+              alt="NewsPortal logo"
+              width={36}
+              height={36}
+              className="rounded-xl transition-all duration-200 group-hover:scale-105"
+              style={{ boxShadow: 'var(--shadow-red)' }}
+            />
             <div className="hidden sm:block leading-none">
               <span className="font-black text-[17px]" style={{ color: 'var(--text)' }}>News</span>
               <span className="font-black text-[17px]" style={{ color: 'var(--red)' }}>Portal</span>
@@ -149,7 +148,7 @@ export const Navbar = () => {
                   value={searchVal}
                   onChange={(e) => handleSearchChange(e.target.value)}
                   placeholder={t('nav.search')}
-                  className="outline-none bg-transparent text-[13px] w-36 sm:w-52 font-medium placeholder:font-normal"
+                  className="outline-none border-none bg-transparent text-[13px] w-36 sm:w-52 font-medium placeholder:font-normal"
                   style={{ color: 'var(--text)' }}
                   onKeyDown={(e) => e.key === 'Escape' && closeSearch()}
                 />

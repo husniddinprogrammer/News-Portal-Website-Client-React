@@ -47,6 +47,13 @@ export const SortPage = () => {
 
   useEffect(() => { setPage(1); }, [sortParam, categoryParam, timeParam, dateFromParam, dateToParam]);
 
+  // Sync local date inputs when URL changes (browser back/forward)
+  useEffect(() => {
+    setDateFrom(dateFromParam);
+    setDateTo(dateToParam);
+    if (!dateFromParam && !dateToParam) setShowDatePicker(false);
+  }, [dateFromParam, dateToParam]);
+
   // Build translated options inside component so t() is reactive
   const SORT_OPTIONS = [
     { value: 'rank_desc',   label: t('sort.rankDesc'),   icon: SORT_ICONS.rank_desc },
@@ -231,7 +238,7 @@ export const SortPage = () => {
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {loadGrid
-                  ? Array(12).fill(0).map((_, i) => <SkeletonCard key={i} />)
+                  ? Array.from({ length: 12 }, (_, i) => <SkeletonCard key={i} />)
                   : grid.length === 0
                     ? <p className="col-span-3 text-center py-16" style={{ color: 'var(--text-muted)' }}>
                         {t('news.noNews')}
@@ -246,7 +253,7 @@ export const SortPage = () => {
         <aside>
           <SectionTitle>{t('news.latest')}</SectionTitle>
           {loadLatest
-            ? Array(10).fill(0).map((_, i) => <SkeletonText key={i} />)
+            ? Array.from({ length: 10 }, (_, i) => <SkeletonText key={i} />)
             : latest.map((n) => <TextNews key={n.id} news={n} />)}
         </aside>
       </div>

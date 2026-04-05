@@ -1,20 +1,28 @@
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { latinToCyrillic, transliterateHtml } from '../utils/transliterate';
 
 /**
- * Returns transliteration helpers bound to the current language.
- * When language is 'uz-cyrillic', text is converted Latin → Cyrillic.
- * Otherwise the original string is returned as-is.
+ * Returns stable transliteration helpers bound to the current language.
+ * Uses useCallback so tr/trHtml references only change when the language changes —
+ * this makes them safe to use in useMemo/useCallback dependency arrays.
  *
- * tr(text)     — plain string
- * trHtml(html) — HTML-safe (preserves tags/attrs)
+ * tr(text)     — plain string: Latin → Cyrillic (or passthrough)
+ * trHtml(html) — HTML-safe: only text nodes converted, tags preserved
  */
 export const useTranslit = () => {
   const { i18n } = useTranslation();
   const active = i18n.language === 'uz-cyrillic';
 
-  return {
-    tr:     (text) => active ? latinToCyrillic(text ?? '') : (text ?? ''),
-    trHtml: (html) => active ? transliterateHtml(html ?? '') : (html ?? ''),
-  };
+  const tr = useCallback(
+    (text) => (active ? latinToCyrillic(text ?? '') : (text ?? '')),
+    [active],
+  );
+
+  const trHtml = useCallback(
+    (html) => (active ? transliterateHtml(html ?? '') : (html ?? '')),
+    [active],
+  );
+
+  return { tr, trHtml };
 };

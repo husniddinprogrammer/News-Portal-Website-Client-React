@@ -29,7 +29,8 @@
     "placeholder": "Izohingizni yozing...",
     "usernamePlaceholder": "Foydalanuvchi nomingiz",
     "submit": "Yuborish",
-    "noComments": "Hali izoh yo'q"
+    "noComments": "Hali izoh yo'q",
+    "emptyError": "Izoh maydoni bo'sh bo'lishi mumkin emas"
   },
   "common": {
     "loading": "Yuklanmoqda...",

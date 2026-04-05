@@ -29,7 +29,8 @@
     "placeholder": "Изоҳингизни ёзинг...",
     "usernamePlaceholder": "Фойдаланувчи номингиз",
     "submit": "Юбориш",
-    "noComments": "Ҳали изоҳ йўқ"
+    "noComments": "Ҳали изоҳ йўқ",
+    "emptyError": "Изоҳ майдони бўш бўлиши мумкин эмас"
   },
   "common": {
     "loading": "Юкланмоқда...",

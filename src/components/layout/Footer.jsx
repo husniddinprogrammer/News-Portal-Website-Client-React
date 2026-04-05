@@ -71,12 +71,14 @@ export const Footer = () => {
           {/* ── Brand column ── */}
           <div>
             <Link to="/" className="flex items-center gap-2.5 mb-4 w-fit group">
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105"
-                style={{ background: 'var(--red)', boxShadow: 'var(--shadow-red)' }}
-              >
-                <span className="text-white font-black text-base leading-none">N</span>
-              </div>
+              <img
+                src="/logo192.png"
+                alt="NewsPortal logo"
+                width={36}
+                height={36}
+                className="rounded-xl transition-transform duration-200 group-hover:scale-105"
+                style={{ boxShadow: 'var(--shadow-red)' }}
+              />
               <span className="font-black text-xl" style={{ color: 'var(--text)' }}>
                 News<span style={{ color: 'var(--red)' }}>Portal</span>
               </span>
