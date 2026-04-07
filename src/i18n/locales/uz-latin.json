@@ -24,15 +24,7 @@
     "liked": "Yoqdi ✓",
     "similarNews": "O'xshash yangiliklar"
   },
-  "comment": {
-    "title": "Izohlar",
-    "placeholder": "Izohingizni yozing...",
-    "usernamePlaceholder": "Foydalanuvchi nomingiz",
-    "submit": "Yuborish",
-    "noComments": "Hali izoh yo'q",
-    "emptyError": "Izoh maydoni bo'sh bo'lishi mumkin emas"
-  },
-  "common": {
+"common": {
     "loading": "Yuklanmoqda...",
     "error": "Xato yuz berdi",
     "retry": "Qayta urinish",
@@ -52,7 +44,6 @@
     "idDesc": "Eng yangi",
     "mostViewed": "Ko'p ko'rilgan",
     "mostLiked": "Ko'p likelangan",
-    "mostCommented": "Ko'p izohli",
     "today": "Bugun",
     "thisWeek": "Shu hafta",
     "thisMonth": "Shu oy",

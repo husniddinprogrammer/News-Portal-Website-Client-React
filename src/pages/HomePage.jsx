@@ -51,12 +51,6 @@ export const HomePage = () => {
     limit: 10,
   });
 
-  // ── World news (latest) — category "world" — fallback to latest
-  const { news: worldNews, isLoading: loadWorld } = useNews({ sort: 'id_desc', limit: 10 });
-
-  // ── Most liked
-  const { news: mostLiked, isLoading: loadLiked } = useNews({ sort: 'most_liked', limit: 9 });
-
   // ── Find category slugs dynamically
   const { data: categories = [] } = useCategories();
   const uzbekSlug = categories.find((c) =>
@@ -65,6 +59,12 @@ export const HomePage = () => {
   const worldSlug = categories.find((c) =>
     /world|jahon|мировой|халқаро/i.test(c.name)
   )?.slug;
+
+  // ── World news (latest) — category "jahon" — fallback to latest
+  const { news: worldNews, isLoading: loadWorld } = useNews({ category: worldSlug, sort: 'id_desc', limit: 10, enabled: Boolean(worldSlug) });
+
+  // ── Most liked
+  const { news: mostLiked, isLoading: loadLiked } = useNews({ sort: 'most_liked', limit: 9 });
   const { news: uzbekNews, isLoading: loadUzbek } = useNews({
     category: uzbekSlug,
     sort: 'id_desc',

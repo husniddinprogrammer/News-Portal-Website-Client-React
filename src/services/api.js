@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000/api/v1';
+const BASE_URL = process.env.REACT_APP_API_URL || 'https://api.news-portal.uz/api/v1';
 
 let accessToken = null;
 let refreshToken = localStorage.getItem('refreshToken') || null;

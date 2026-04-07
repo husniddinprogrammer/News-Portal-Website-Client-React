@@ -24,15 +24,7 @@
     "liked": "Ёқди ✓",
     "similarNews": "Ўхшаш янгиликлар"
   },
-  "comment": {
-    "title": "Изоҳлар",
-    "placeholder": "Изоҳингизни ёзинг...",
-    "usernamePlaceholder": "Фойдаланувчи номингиз",
-    "submit": "Юбориш",
-    "noComments": "Ҳали изоҳ йўқ",
-    "emptyError": "Изоҳ майдони бўш бўлиши мумкин эмас"
-  },
-  "common": {
+"common": {
     "loading": "Юкланмоқда...",
     "error": "Хато юз берди",
     "retry": "Қайта уриниш",
@@ -52,7 +44,6 @@
     "idDesc": "Энг янги",
     "mostViewed": "Кўп кўрилган",
     "mostLiked": "Кўп лайкланган",
-    "mostCommented": "Кўп изоҳли",
     "today": "Бугун",
     "thisWeek": "Шу ҳафта",
     "thisMonth": "Шу ой",

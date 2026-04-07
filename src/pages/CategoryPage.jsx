@@ -20,11 +20,10 @@ export const CategoryPage = () => {
   const { tr } = useTranslit();
 
   const SORT_OPTIONS = useMemo(() => [
-    { value: 'id_desc',        label: t('sort.idDesc') },
-    { value: 'rank_desc',      label: t('sort.rankDesc') },
-    { value: 'most_viewed',    label: t('sort.mostViewed') },
-    { value: 'most_liked',     label: t('sort.mostLiked') },
-    { value: 'most_commented', label: t('sort.mostCommented') },
+    { value: 'id_desc',     label: t('sort.idDesc') },
+    { value: 'rank_desc',   label: t('sort.rankDesc') },
+    { value: 'most_viewed', label: t('sort.mostViewed') },
+    { value: 'most_liked',  label: t('sort.mostLiked') },
   ], [t]);
 
   // Sort va page birgalikda — sort o'zganda page 1 ga qaytadi

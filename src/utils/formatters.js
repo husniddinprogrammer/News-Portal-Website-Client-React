@@ -11,5 +11,5 @@ export const truncate = (str, max = 120) =>
 export const imageUrl = (url) => {
   if (!url) return null;
   if (url.startsWith('http')) return url;
-  return `${process.env.REACT_APP_API_URL?.replace('/api/v1', '') || 'http://localhost:3000'}${url}`;
+  return `${process.env.REACT_APP_API_URL?.replace('/api/v1', '') || 'https://api.news-portal.uz'}${url}`;
 };

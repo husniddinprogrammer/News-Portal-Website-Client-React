@@ -148,8 +148,8 @@ export const Navbar = () => {
                   value={searchVal}
                   onChange={(e) => handleSearchChange(e.target.value)}
                   placeholder={t('nav.search')}
-                  className="outline-none border-none bg-transparent text-[13px] w-36 sm:w-52 font-medium placeholder:font-normal"
-                  style={{ color: 'var(--text)' }}
+                  className="bg-transparent text-[13px] w-36 sm:w-52 font-medium placeholder:font-normal"
+                  style={{ color: 'var(--text)', outline: 'none', border: 'none', boxShadow: 'none' }}
                   onKeyDown={(e) => e.key === 'Escape' && closeSearch()}
                 />
                 <button
